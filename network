@@ -1,0 +1,108 @@
+config globals 'globals'
+        option ula_prefix 'fd00:26ff:4f20::/48'
+
+config interface 'lan'
+        option type 'bridge'
+        option ifname 'eth0'
+        option proto 'static'
+        option ipaddr '192.168.1.1'
+        option netmask '255.255.255.0'
+        option ip6assign '60'
+
+config device 'lan_dev'
+        option name 'eth0'
+        option macaddr '60:38:e0:91:94:c7'
+
+config interface 'wan'
+        option ifname 'eth1'
+        option proto 'dhcp'
+        option type 'bridge'
+
+config device 'wan_dev'
+        option name 'eth1'
+        option macaddr '60:38:e0:91:94:c6'
+
+config interface 'wan6'
+        option ifname 'eth1'
+        option proto 'dhcpv6'
+
+config interface 'loopback'
+        option ipaddr '127.0.0.1'
+        option ifname 'lo'
+        option netmask '255.0.0.0'
+        option proto 'static'
+
+config switch 'cfg083777'
+        option name 'switch0'
+        option enable_vlan '1'
+        option reset '1'
+
+config switch_vlan 'cfg091ec7'
+        option vid '1'
+        option device 'switch0'
+        option ports '0 1 2 3 4'
+        option vlan '1'
+
+config interface 'wlan0'
+        option proto 'static'
+        option netmask '255.255.255.0'
+        option ipaddr '10.0.80.1'
+
+dhcp
+
+config dhcp 'lan'
+        option interface 'lan'
+        option dhcpv6 'server'
+        option ra 'server'
+        option ra_management '1'
+        option ignore '1'
+
+config dhcp 'wan'
+        option interface 'wan'
+        option ignore '1'
+
+config dhcp 'vlan10'
+        option start '100'
+        option leasetime '12h'
+        option limit '150'
+        option interface 'vlan10'
+        option dynamicdhcp '0'
+        option force '1'
+
+config odhcpd 'odhcpd'
+        option maindhcp '0'
+        option leasefile '/tmp/hosts/odhcpd'
+        option leasetrigger '/usr/sbin/odhcpd-update'
+        option loglevel '4'
+
+config dnsmasq 'cfg01411c'
+        option readethers '1'
+        option expandhosts '1'
+        option boguspriv '1'
+        option localise_queries '1'
+        option nonegcache '0'
+        option nonwildcard '1'
+        option resolvfile '/tmp/resolv.conf.auto'
+        option rebind_localhost '1'
+        option domain 'lan'
+        option localservice '1'
+        option rebind_protection '1'
+        option filterwin2k '0'
+        option local '/lan/'
+        option authoritative '1'
+        option domainneeded '1'
+        option leasefile '/tmp/dhcp.leases'
+
+config domain
+        option name 'tufan.tunerd.mx'
+        option ip '192.168.0.67'
+
+config domain
+        option name 'tuportal.tunerd.mx'
+        option ip '67.205.153.170'
+
+config dhcp 'wlan0'
+        option start '100'
+        option leasetime '12h'
+        option limit '150'
+        option interface 'wlan0
