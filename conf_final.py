@@ -9,16 +9,18 @@ import fileinput
 from getmac import get_mac_address
 
 
-r = requests.post('https://tuportal.tunerd.mx/api/aps/show?mac_ap=12:42:C5:02:02:0D')
-#Obtención de la MAC
-#wlan_mac = get_mac_address(interface="wlan0").upper()
-#url = 'https://tuportal.tunerd.mx/api/aps/show?mac_ap=' + wlan_mac
-#r = requests.post(url)
+#r = requests.post('https://tuportal.tunerd.mx/api/aps/show?mac_ap=12:42:C5:02:02:0D')
+
+
+# **** We get the MAC address **** #
+
+wlan_mac = get_mac_address(interface="wlan0").upper()
+url = 'https://tuportal.tunerd.mx/api/aps/show?mac_ap=' + wlan_mac
+r = requests.post(url)
 test = json.loads(r.text)
 
 
-
-#Asignación del json
+# **** JSON Mapping **** #
 
 ip = test['ip']
 mask = test['mask']
@@ -31,7 +33,7 @@ range_start = test['range_start']
 range_end = test['range_end']
 name_wifi = test['name_wifi']
 
-#Subneteo
+# **** Subnetting **** #
 addr = ipcalc.IP(ip, mask = mask)
 network_with_cidr = str(addr.guess_network())
 bare_network = network_with_cidr.split('/')[0]
@@ -40,6 +42,8 @@ bare_network_cidr = network_with_cidr.split('/')[1]
 start_list = range_start.split('.')
 end_list = range_end.split('.')
 max_pool = abs(int(start_list[3]) - int(end_list[3]))
+
+# **** Functions ****#
 
 def updateSsid():
     file = open("/etc/network/wireless", 'w')
